@@ -14,7 +14,6 @@ class FileUploadApiController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request);
         $request->validate([
             'file_name' => 'file|mimes:csv,xlsx,xls|max:10000',
         ]);
