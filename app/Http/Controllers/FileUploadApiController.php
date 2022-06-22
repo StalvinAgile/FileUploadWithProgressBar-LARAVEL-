@@ -32,7 +32,8 @@ class FileUploadApiController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $fileNameOnly = pathinfo($originalFileName, PATHINFO_FILENAME);
                 $fileName = Str::slug($fileNameOnly) . '-' . time() . '.' . $extension;
-                return $file->storeAs('public/excel', $fileName);
+                return $file->storePubliclyAs('public/excel', $fileName);
+                // return $file->storeAs('public/excel', $fileName);
             }
             return null;
         } catch (Exception $file_exception) {
