@@ -12,9 +12,9 @@ class FileUploadApiController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'file_name' => 'file|mimes:csv,xlsx,xls|max:10000',
-            ]);
+            // $request->validate([
+            //     'file_name' => 'file|mimes:csv,xlsx,xls|max:10000',
+            // ]);
             $file = new FileUpload();
             $file->file_name = $this->uploadFile($request);
             $file->save();
@@ -32,7 +32,7 @@ class FileUploadApiController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $fileNameOnly = pathinfo($originalFileName, PATHINFO_FILENAME);
                 $fileName = Str::slug($fileNameOnly) . '-' . time() . '.' . $extension;
-                return $file->storeAs('public', $fileName);
+                return $file->storeAs('public/excel', $fileName);
             }
             return null;
         } catch (Exception $file_exception) {
