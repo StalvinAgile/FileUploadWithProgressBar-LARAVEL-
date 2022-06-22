@@ -27,6 +27,7 @@ class FileUploadApiController extends Controller
     }
     protected function uploadFile(Request $request)
     {
+        $folder_name = $request->folder_name;
         try {
             if ($request->hasFile('file_name')) {
                 $file = $request->file('file_name');
@@ -34,7 +35,7 @@ class FileUploadApiController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $fileNameOnly = pathinfo($originalFileName, PATHINFO_FILENAME);
                 $fileName = Str::slug($fileNameOnly) . '-' . time() . '.' . $extension;
-                return $file->move('storage/excel', $fileName);
+                return $file->move('storage'.'/'.$folder_name, $fileName);
             }
             return null;
         } catch (Exception $file_exception) {
