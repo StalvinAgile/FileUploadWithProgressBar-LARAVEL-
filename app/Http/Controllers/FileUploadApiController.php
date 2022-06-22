@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\FileUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Log;
 
 class FileUploadApiController extends Controller
 {
 
     public function store(Request $request)
     {
+        Log::info($request);
         try {
             // $request->validate([
             //     'file_name' => 'file|mimes:csv,xlsx,xls|max:10000',
@@ -32,8 +34,7 @@ class FileUploadApiController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $fileNameOnly = pathinfo($originalFileName, PATHINFO_FILENAME);
                 $fileName = Str::slug($fileNameOnly) . '-' . time() . '.' . $extension;
-                return $file->storePubliclyAs('public/excel', $fileName);
-                // return $file->storeAs('public/excel', $fileName);
+                return $file->move('storage/excel', $fileName);
             }
             return null;
         } catch (Exception $file_exception) {
