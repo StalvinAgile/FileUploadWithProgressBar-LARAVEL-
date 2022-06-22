@@ -12,15 +12,18 @@ class FileUploadApiController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request);
+        
         try {
             // $request->validate([
             //     'file_name' => 'file|mimes:csv,xlsx,xls|max:10000',
             // ]);
             $file = new FileUpload();
             $file->file_name = $this->uploadFile($request);
+            $filepath = $file->file_name;
             $file->save();
-            return response()->json(['status' => 'S', 'message' => 'file uploaded successfully']);
+            Log::info($filepath);
+            // return response()->json(['status' => 'S', 'message' => 'file uploaded successfully','sendfile' => $filepath]);
+            return response()->json(['status' => '$status', 'message' => '$message']);
         } catch (Exception $file_exception) {
             return response()->json(['status' => 'E', 'message' => 'invalid file']);
         }
