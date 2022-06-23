@@ -17,13 +17,13 @@ class FileUploadApiController extends Controller
             // $request->validate([
             //     'file_name' => 'file|mimes:csv,xlsx,xls|max:10000',
             // ]);
-            $file = new FileUpload();
-            $file->file_name = $this->uploadFile($request);
-            $filepath = $file->file_name;
-            $file->save();
-            Log::info($filepath);
-            // return response()->json(['status' => 'S', 'message' => 'file uploaded successfully','sendfile' => $filepath]);
-            return response()->json(['status' => '$status', 'message' => '$message']);
+            $filepath = $this->uploadFile($request);
+            $file_upload = FileUpload::create([
+                'file_name' => $filepath,
+            ]);
+            $filepathdetails = $this->fetchdatabase($file_upload->id);
+            Log::info($filepathdetails);
+            return response()->json(['status' => '$status', 'message' => '$message','filepath' => $filepathdetails]);
         } catch (Exception $file_exception) {
             return response()->json(['status' => 'E', 'message' => 'invalid file']);
         }
@@ -43,6 +43,17 @@ class FileUploadApiController extends Controller
             return null;
         } catch (Exception $file_exception) {
             return response()->json(['status' => 'E', 'message' => 'Error Uploading file ']);
+        }
+    }
+    public function fetchdatabase($id)
+    {
+
+        try {
+            $filesdata = FileUpload::where('id', $id)->first();
+
+            return $filesdata;
+        } catch (Exception $file_exception) {
+            return response()->json(['status' => 'E', 'message' => 'invalid file']);
         }
     }
 }
